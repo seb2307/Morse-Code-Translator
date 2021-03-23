@@ -11,6 +11,18 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
+/*
+ * Main class responsible for all operations triggered from GUI.
+ *
+ * Allows:
+ *       - switching modes: alphabet to Morse Code translation and the opposite.
+ *       - grabbing events: keyboard pressed in input text edit box
+ *       - handling translation in both direction
+ *       - clear all button action
+ *       - adding instructions for a user
+ *       - adding warning in a gui in case of not allowed key being pressed.
+ *
+ */
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -40,9 +52,8 @@ private:
     Ui::MainWindow *ui;
     char temp_key;
     MorseTranslator *translator;
-    morsebst::MorseBST *morseBst;
     enum TRANSLATOR_MODE mode;
     void clearWarningLabel();
-    std::string *str_buff;
+    std::string *str_buff; // string buffer for each letter encoded in Morse Code
 };
 #endif // MAINWINDOW_H

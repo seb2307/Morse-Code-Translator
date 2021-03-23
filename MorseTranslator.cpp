@@ -1,6 +1,15 @@
 #include "MorseTranslator.h"
 #include "MorseBST.h"
 
+MorseTranslator::MorseTranslator()
+{
+    morseBst = new morsebst::MorseBST();
+}
+
+MorseTranslator::~MorseTranslator() {
+    delete morseBst; // recursivelly will delete all nodes in a binary search tree
+}
+
 const char* MorseTranslator::translate2Morse(const char character){
   switch (character) {
   case 'a':
@@ -114,5 +123,11 @@ void MorseTranslator::translate2MorseWholeString(const std::string* str, std::st
  for(std::string::const_iterator it = str->begin(); it != str->end(); ++it)
  {
      *output += MorseTranslator::translate2Morse(*it);
+     *output += ' ';
  }
+}
+
+morsebst::MorseBST *MorseTranslator::getMorseBst() const
+{
+    return morseBst;
 }

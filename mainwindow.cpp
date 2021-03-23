@@ -14,13 +14,12 @@ MainWindow::MainWindow(QWidget *parent)
     translator = new MorseTranslator();
     ui->warningLabel->clear();
 
-    morseBst = new MorseBST();
     str_buff = new std::string();
     ui->modeButton->setText("ASCII TO MORSE");
     ui->clearAllButton->setText("Clear All");
     ui->inputTextEdit->setPlainText("");
     ui->outputText->setPlainText("");
-    ui->instructionLabel->setText("Instruction:\nASCII TO MORSE mode:  Insert normal text\nMORSE TO ASCII mode:  Write morse code \".\" or \"-\" separating\nletters by spaces and words by slash \"/\"\nUse Convert Button to translate the whole input text.");
+    ui->instructionLabel->setText("Instruction:\nASCII TO MORSE mode:  Insert normal text\nMORSE TO ASCII mode:  Write morse code \".\" or \"-\" separating\nletters by spaces and words by slash \"/\"\nUse Convert Button: it is possible to right mouse click and paste longer text\nand translate the whole input text by pressing convert button.");
 }
 
 MainWindow::~MainWindow()
@@ -28,7 +27,6 @@ MainWindow::~MainWindow()
     delete ui;
     delete translator;
     delete str_buff;
-    delete morseBst;
 }
 
 bool MainWindow::eventFilter(QObject *object, QEvent *event)
@@ -93,7 +91,7 @@ bool MainWindow::handleMorse2AlphabetTranslation(QObject *object, QEvent *event)
         clearWarningLabel();
         if(str_buff->size() > 0)
         {
-            const char* decoded_ascii_ptr = morseBst->get(str_buff->c_str());
+            const char* decoded_ascii_ptr = translator->getMorseBst()->get(str_buff->c_str());
 
             if(decoded_ascii_ptr != nullptr)
             {
@@ -120,8 +118,8 @@ bool MainWindow::handleMorse2AlphabetTranslation(QObject *object, QEvent *event)
     }
     else
     {
-        ui->warningLabel->setText("Invalid parameter. accepted a-z and 0-9 only");
-        qDebug() << "Invalid parameter. accepted a-z and 0-9 only";
+        ui->warningLabel->setText("<font color='red'>Invalid parameter. accepted '.' , '-' space and '/'</font>");
+        qDebug() << "Invalid parameter. accepted '.' , '-' space and '/'";
         return true; // this will stop going to print text in a text box
     }
 }
@@ -161,9 +159,18 @@ void MainWindow::on_convertButton_clicked()
     std::string out_str;
 
     if(mode == MORSE_TO_ASCII)
-        morseBst->decodeWholeText(&whole_text, &out_str);
+        translator->getMorseBst()->decodeWholeText(&whole_text, &out_str);
     else
-        translator->translate2MorseWholeString(&whole_text, &out_str);
+    {
+        QChar search_dot('.');
+        QChar search_dah('-');
+        QChar search_slash('/');
+        if(ui->inputTextEdit->toPlainText().contains(search_dot) || ui->inputTextEdit->toPlainText().contains(search_dah) || ui->inputTextEdit->toPlainText().contains(search_slash))
+            ui->warningLabel->setText("<font color='red'>Invalid parameter. accepted a-z and 0-9 only</font>");
+        else
+            translator->translate2MorseWholeString(&whole_text, &out_str);
+    }
+
 
     ui->outputText->setPlainText(ui->outputText->toPlainText() + out_str.c_str());
     str_buff->clear();
