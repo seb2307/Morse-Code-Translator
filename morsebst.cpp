@@ -55,40 +55,41 @@ MorseBST::MorseBST() : root(nullptr)
 
 MorseBST::~MorseBST()
 {
-    delete root; // this will trigger automatic deletion all children recursivelly
+    delete root; // this will trigger automatic deletion of all Nodes and their children recursivelly
 }
 
 void MorseBST::initMorseBST()
 {
     if(root == nullptr) root = new MorseBST::Node( nullptr, '\0');
-    //    std::vector<MorseBST::Node*> deb_nodes;
+
     for( int i =0; i< LETTERS; i++)
         put(&root, letters[i], 'A' + i);
+
     for( int i =0; i< NUMBERS; i++)
         put(&root, numbers[i], '0' + i);
-
-    //    for(std::vector<MorseBST::Node*>::iterator it = deb_nodes.begin() ; it != deb_nodes.end(); ++it)
-    //    {
-    //        qDebug() << "getLeft_dit: " << *(*it)->getLeft_dit() << "getRight_dat: " << *(*it)->getRight_dah() << "getValue: " << (*it)->getValue() ;
-    //    }
 }
 
 MorseBST::Node *MorseBST::put(MorseBST::Node **x, const char* key, char value)
 {
     if(*x == nullptr) *x = new MorseBST::Node( key, '\0');
+
     if(*key == '\0')
     {
         (*x)->setValue(value);
     }
+
     if(*key == '.') put((*x)->getLeft_dit(), ++key, value);
     else if(*key == '-') put((*x)->getRight_dah(), ++key, value);
+
     return *x;
 }
 
 char *MorseBST::get(MorseBST::Node *x, const char* key)
 {
     if (x == nullptr) return nullptr;
+
     if(*key == '\0') return x->getValue();
+
     if(*key == '.') return get(*x->getLeft_dit(), ++key);
     else if(*key == '-') return get(*x->getRight_dah(), ++key);
     else
@@ -116,7 +117,7 @@ MorseBST::Node::~Node()
         delete right_dah;
     N--;
     if(N < 0)
-        qDebug() << "Invalid parameter. accepted a-z and 0-9 only";
+        qDebug() << "N should not be < 0";
 }
 
 void MorseBST::Node::setValue(char value)

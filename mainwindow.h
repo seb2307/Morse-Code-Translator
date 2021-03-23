@@ -26,16 +26,17 @@ public:
     void clearAll();
 
 private slots:
-    void on_pushButton_clicked();
+    void on_modeButton_clicked();
     void on_clearAllButton_clicked();
     bool eventFilter(QObject *object, QEvent *event);
 
-    void on_pushButton_2_clicked();
+    void on_convertButton_clicked();
 
 private:
     void keyPressedEvent(QEvent *event);
     bool handleASCII2MorseTranslation(QObject *object, QEvent *event);
-    bool handleMorse2ASCIITranslation(QObject *object, QEvent *event);
+    bool handleMorse2AlphabetTranslation(QObject *object, QEvent *event);
+
     Ui::MainWindow *ui;
     char temp_key;
     MorseTranslator *translator;

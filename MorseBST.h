@@ -12,8 +12,6 @@ namespace morsebst {
 class MorseBST
 {
 
-
-
 public:
 
     class Node
@@ -38,6 +36,8 @@ public:
         Node *right_dah;
         static int N;
     };
+
+
     MorseBST();
     ~MorseBST();
     void initMorseBST();
